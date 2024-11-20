@@ -2,6 +2,5 @@ flask
 pandas
 numpy
 prophet
-io
-base64
+gunicorn
 matplotlib
