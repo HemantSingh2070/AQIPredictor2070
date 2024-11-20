@@ -44,6 +44,10 @@
         <h3>Forecast Plot:</h3>
         <img src="data:image/png;base64,{{ plot_url }}" alt="Forecast Plot">
     {% endif %}
+    {% if plot_url_01 %}
+        <h3>Forecast Plot:</h3>
+        <img src="data:image/png;base64,{{ plot_url_01 }}" alt="Forecast Plot">
+    {% endif %}
     {% if error %}
         <p style="color:red;">{{ error }}</p>
     {% endif %}

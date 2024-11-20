@@ -79,12 +79,21 @@ def index():
         forecasr = model.predict(future)
         model.plot(forecasr)
         model.plot_components(forecasr)
-        img = io.BytesIO()
-        plt.savefig(img, format='png')
-        img.seek(0)
-        plot_url = base64.b64encode(img.getvalue()).decode()
+         # Plot the forecast
+        fig1 = model.plot(forecasr)
+        img1 = io.BytesIO()
+        plt.savefig(img1, format='png')
+        img1.seek(0)
+        plot_url1 = base64.b64encode(img1.getvalue()).decode()
+        
+        # Plot the components
+        fig2 = model.plot_components(forecasr)
+        img2 = io.BytesIO()
+        plt.savefig(img2, format='png')
+        img2.seek(0)
+        plot_url2 = base64.b64encode(img2.getvalue()).decode()
 
-        return render_template(indexHTML, cities=cities, plot_url=plot_url,plot_url_01=None,error=None, city=city)
+        return render_template(indexHTML, cities=cities, plot_url=plot_url1,plot_url_01=plot_url2,error=None, city=city)
 
     return render_template(indexHTML, cities=cities, plot_url=None,plot_url_01=None)
 
