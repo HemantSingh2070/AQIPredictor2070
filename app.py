@@ -60,7 +60,7 @@ def index():
         try:
             air_quality_data = pd.read_csv(file_path)
         except FileNotFoundError:
-            return render_template(indexHTML, cities=cities, error="File not found for the selected city!")
+            return render_template(indexHTML, cities=cities,pollutant=None,city=None, error="File not found for the selected city!")
 
 
         # Processing the date column
@@ -72,7 +72,7 @@ def index():
         date_time['ds'] = date_time['Date'].astype(str) + ' ' + date_time['Time'].astype(str)
         data = pd.DataFrame()
         data['ds'] = pd.to_datetime(date_time['ds'])
-        data['y'] = air_quality_data['AQI']
+        data['y'] = air_quality_data[pollutant]
         model = Prophet()
         model.fit(data)
         future = model.make_future_dataframe(periods=365,freq=fre)
@@ -93,9 +93,9 @@ def index():
         img2.seek(0)
         plot_url2 = base64.b64encode(img2.getvalue()).decode()
 
-        return render_template(indexHTML, cities=cities, plot_url=plot_url1,plot_url_01=plot_url2,error=None, city=city)
+        return render_template(indexHTML, cities=cities,plot_url=plot_url1,plot_url_01=plot_url2,error=None,pollutant=pollutant,city=city)
 
-    return render_template(indexHTML, cities=cities, plot_url=None,plot_url_01=None)
+    return render_template(indexHTML, cities=cities, plot_url=None,plot_url_01=None,city=None,pollutant=None)
 
 if __name__ == '__main__':
     app.run(debug=True)

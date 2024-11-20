@@ -1,12 +1,18 @@
 *{
     color: white;
-    background-color: rgb(18, 20, 35);
+    background: rgb(21, 21, 41);
     text-align: center;
     margin: 10px;
 }
 
 h1{
     font-family: "Marck Script", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+h2{
+    font-family: "Ga Maamli", sans-serif;
     font-weight: 400;
     font-style: normal;
 }

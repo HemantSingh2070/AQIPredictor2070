@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Pre:wght@400..700&family=Marck+Script&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Pre:wght@400..700&family=Ga+Maamli&family=Marck+Script&display=swap" rel="stylesheet">
 </head>
 <body>
     <h1>Air Quality Prediction App</h1>
@@ -39,7 +40,10 @@
 
         <input type="submit" value="Submit">
     </form>
-
+    {% if city %}
+    <h2>{{city}}</h2>
+    <h2>{{pollutant}} Graph</h2>
+    {% endif %}
     {% if plot_url %}
         <h3>Forecast Plot:</h3>
         <img src="data:image/png;base64,{{ plot_url }}" alt="Forecast Plot">
