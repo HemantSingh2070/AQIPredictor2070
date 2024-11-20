@@ -49,7 +49,7 @@ cities = [
 
 indexHTML = "index.html"
 # Home route
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['GET','POST'])
 def index():
     if request.method == 'POST':
         city = request.form['city']
@@ -102,7 +102,9 @@ def index():
         plot_url = base64.b64encode(img.getvalue()).decode()
 
         return render_template(indexHTML, cities=cities, plot_url=plot_url, error=None, city=city)
-
+ 
+    if request.method == 'GET':
+         return render_template(indexHTML, cities=cities, plot_url=None)
     return render_template(indexHTML, cities=cities, plot_url=None)
 
 if __name__ == '__main__':
