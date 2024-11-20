@@ -31,9 +31,9 @@
 
         <label for="freq">Select Prediction Frequency:</label>
         <select name="freq" id="freq">
-            <option value="D (Daily)">D (Daily)</option>
-            <option value="W (Weekly)">W (Weekly)</option>
-            <option value="M (Monthly)">M (Monthly)</option>
+            <option value="D">D (Daily)</option>
+            <option value="W">W (Weekly)</option>
+            <option value="M">M (Monthly)</option>
         </select>
         <br>
 
@@ -44,7 +44,6 @@
         <h3>Forecast Plot:</h3>
         <img src="data:image/png;base64,{{ plot_url }}" alt="Forecast Plot">
     {% endif %}
-
     {% if error %}
         <p style="color:red;">{{ error }}</p>
     {% endif %}

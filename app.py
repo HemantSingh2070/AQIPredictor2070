@@ -53,7 +53,7 @@ indexHTML = "index.html"
 def index():
     if request.method == 'POST':
         city = request.form['city']
-        freq = request.form['freq']
+        fre = request.form['freq']
         pollutant = request.form['pollutant']
 
         file_path = f"data/{city}.csv" 
@@ -73,7 +73,7 @@ def index():
         data['y'] = air_quality_data['AQI']
         model = Prophet()
         model.fit(data)
-        future = model.make_future_dataframe(periods=365,freq='H')
+        future = model.make_future_dataframe(periods=365,freq=fre)
         forecasr = model.predict(future)
         model.plot(forecasr)
         model.plot_components(forecasr)
@@ -82,9 +82,9 @@ def index():
         img.seek(0)
         plot_url = base64.b64encode(img.getvalue()).decode()
 
-        return render_template(indexHTML, cities=cities, plot_url=plot_url, error=None, city=city)
+        return render_template(indexHTML, cities=cities, plot_url=plot_url,plot_url_01=None,error=None, city=city)
 
-    return render_template(indexHTML, cities=cities, plot_url=None)
+    return render_template(indexHTML, cities=cities, plot_url=None,plot_url_01=None)
 
 if __name__ == '__main__':
     app.run(debug=True)
