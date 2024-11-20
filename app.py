@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify, send_from_directory
 import pandas as pd
 import numpy as np
 from prophet import Prophet
@@ -49,7 +49,7 @@ cities = [
 
 indexHTML = "index.html"
 # Home route
-@app.route('/', methods=['GET','POST'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         city = request.form['city']
@@ -64,42 +64,26 @@ def index():
 
 
         # Processing the date column
-        
-        air_quality_data['Date'] = pd.to_datetime(air_quality_data['Date'], errors='coerce', dayfirst=True)
-        air_quality_data['time'] = "00:00:00"
-        air_quality_data['ds'] = air_quality_data['Date'].astype(str) + " " + air_quality_data['time']
-        air_quality_data['ds'] = pd.to_datetime(air_quality_data['ds'], format='mixed', errors='coerce')
+        date_info = pd.to_datetime(air_quality_data['Date'])
+        fixed_time = '12:00:00'
+        date_time = pd.concat([date_info, pd.Series([fixed_time] * len(date_info), name='Time')], axis=1)
+        date_time['ds'] = date_time['Date'].astype(str) + ' ' + date_time['Time'].astype(str)
         data = pd.DataFrame()
-        data['ds'] = pd.to_datetime(air_quality_data['ds'])
-
-        # Select the pollutant
-        data['y'] = air_quality_data[pollutant]
-
-        # Frequency code
-        freq_code = freq.split(" ")[0]
-
-        # Building the Prophet model
+        data['ds'] = pd.to_datetime(date_time['ds'])
+        data['y'] = air_quality_data['AQI']
         model = Prophet()
         model.fit(data)
-
-        # Generating future predictions
-        future = model.make_future_dataframe(periods=30, freq=freq_code)
-        forecast = model.predict(future)
-
-        # Plotting the forecast
-        fig, ax = plt.subplots()
-        model.plot(forecast, ax=ax)
-
-        # Convert plot to base64 for embedding in HTML
+        future = model.make_future_dataframe(periods=365,freq='H')
+        forecasr = model.predict(future)
+        model.plot(forecasr)
+        model.plot_components(forecasr)
         img = io.BytesIO()
         plt.savefig(img, format='png')
         img.seek(0)
         plot_url = base64.b64encode(img.getvalue()).decode()
 
         return render_template(indexHTML, cities=cities, plot_url=plot_url, error=None, city=city)
- 
-    if request.method == 'GET':
-         return render_template(indexHTML, cities=cities, plot_url=None)
+
     return render_template(indexHTML, cities=cities, plot_url=None)
 
 if __name__ == '__main__':
