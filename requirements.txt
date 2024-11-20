@@ -1,6 +1,7 @@
-flask
+Flask
 pandas
 numpy
 prophet
-gunicorn
 matplotlib
+gunicorn
+

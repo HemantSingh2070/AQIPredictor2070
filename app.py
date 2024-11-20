@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request
 import pandas as pd
 import numpy as np
 from prophet import Prophet
@@ -49,7 +49,7 @@ cities = [
 
 indexHTML = "index.html"
 # Home route
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['POST'])
 def index():
     if request.method == 'POST':
         city = request.form['city']
@@ -63,12 +63,17 @@ def index():
             return render_template(indexHTML, cities=cities, error="File not found for the selected city!")
 
         air_quality_data.replace(to_replace=-200, value=np.nan, inplace=True)
-        air_quality_data.fillna(air_quality_data.mean(), inplace=True)
+        # Fill NaN only in numeric columns
+        numeric_cols = air_quality_data.select_dtypes(include='number')
+        air_quality_data[numeric_cols.columns] = numeric_cols.fillna(numeric_cols.mean())
+
 
         # Processing the date column
+        
         air_quality_data['Date'] = pd.to_datetime(air_quality_data['Date'], errors='coerce', dayfirst=True)
         air_quality_data['time'] = "00:00:00"
         air_quality_data['ds'] = air_quality_data['Date'].astype(str) + " " + air_quality_data['time']
+        air_quality_data['ds'] = pd.to_datetime(air_quality_data['ds'], format='mixed', errors='coerce')
         data = pd.DataFrame()
         data['ds'] = pd.to_datetime(air_quality_data['ds'])
 
