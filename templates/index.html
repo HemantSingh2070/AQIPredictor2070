@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="./assets/icon.png">
+    <link rel="icon" href="{{ url_for('static', filename='assets/favicon.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <title>Air Quality Prediction App</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Pre:wght@400..700&family=Marck+Script&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Pre:wght@400..700&family=Ga+Maamli&family=Marck+Script&display=swap" rel="stylesheet">
-</head>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Edu+AU+VIC+WA+NT+Pre:wght@400..700&family=Ga+Maamli&family=Marck+Script&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    </head>
 <body>
+    <div class="contain">
     <h1>Air Quality Prediction App</h1>
-    <form method="post">
+    <form class="card" method="post">
         <label for="city">Select a City:</label>
-        <select name="city" id="city">
+        <select name="city" class="box" id="city">
             {% for city in cities %}
                 <option value="{{ city }}">{{ city }}</option>
             {% endfor %}
@@ -23,7 +23,7 @@
         <br>
 
         <label for="pollutant">Select Pollutant:</label>
-        <select name="pollutant" id="pollutant">
+        <select class="box" name="pollutant" id="pollutant">
             <option value="AQI">AQI</option>
             <option value="PM10">PM10</option>
             <option value="PM2.5">PM2.5</option>
@@ -31,7 +31,7 @@
         <br>
 
         <label for="freq">Select Prediction Frequency:</label>
-        <select name="freq" id="freq">
+        <select class="box" name="freq" id="freq">
             <option value="D">D (Daily)</option>
             <option value="W">W (Weekly)</option>
             <option value="M">M (Monthly)</option>
@@ -40,17 +40,18 @@
 
         <input type="submit" value="Submit">
     </form>
+    </div>
     {% if city %}
-    <h2>{{city}}</h2>
+    <h1>{{city}}</h1>
     <h2>{{pollutant}} Graph</h2>
     {% endif %}
     {% if plot_url %}
         <h3>Forecast Plot:</h3>
-        <img src="data:image/png;base64,{{ plot_url }}" alt="Forecast Plot">
+        <img class="plotter" src="data:image/png;base64,{{ plot_url }}" alt="Forecast Plot">
     {% endif %}
     {% if plot_url_01 %}
-        <h3>Forecast Plot:</h3>
-        <img src="data:image/png;base64,{{ plot_url_01 }}" alt="Forecast Plot">
+        <h3>Forecast Linear Component Plot:</h3>
+        <img class="plotter" src="data:image/png;base64,{{ plot_url_01 }}" alt="Forecast Plot">
     {% endif %}
     {% if error %}
         <p style="color:red;">{{ error }}</p>
