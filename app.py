@@ -65,8 +65,7 @@ def index():
 
         # Processing the date column
         date_info = pd.to_datetime(air_quality_data['Date'])
-        air_quality_data['Date'] = date_info.dt.strftime('%Y-%m-%d')
-        date_info = pd.to_datetime(air_quality_data['Date'])
+        air_quality_data['Date'] = pd.to_datetime(air_quality_data['Date']).dt.strftime('%Y-%m-%d')
         fixed_time = '12:00:00'
         date_time = pd.concat([date_info, pd.Series([fixed_time] * len(date_info), name='Time')], axis=1)
         date_time['ds'] = date_time['Date'].astype(str) + ' ' + date_time['Time'].astype(str)
